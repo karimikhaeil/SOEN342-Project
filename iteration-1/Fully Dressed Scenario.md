@@ -28,7 +28,7 @@ The system returns displayError("Task title is required")
 1. The user initiates task creation
 2. The user provides title, priotityLevel, and optional description and dueDate
 3. The system validates the input
-4. The system created the Task
+4. The system creates the Task
 5. The system returns taskCreated(taskId)
 
 ## Failure Case
