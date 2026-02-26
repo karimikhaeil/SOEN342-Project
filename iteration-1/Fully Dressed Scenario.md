@@ -1,4 +1,4 @@
-# Fully Dressed Use Case: Create Task 
+# Fully Dressed Use Case: Create Task  
 
-Primary Actor: User 
+Primary Actor: User  
 Goal: Create a new task in the system
