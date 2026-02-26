@@ -16,5 +16,6 @@ The task has:
 - title set to the provided value
 - status = open
 - creationDate = currentDateTime
+
 The system returns taskCreated(taskId0
   
