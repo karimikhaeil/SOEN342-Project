@@ -17,5 +17,9 @@ The task has:
 - status = open
 - creationDate = currentDateTime
 
-The system returns taskCreated(taskId0
+The system returns taskCreated(taskId)
+
+# Postconditions on Failure
+No task is created  
+The system returns displayError("Task title is required")
   
