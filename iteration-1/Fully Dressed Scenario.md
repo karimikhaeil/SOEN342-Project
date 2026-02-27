@@ -39,7 +39,7 @@
 5. The system returns taskCreated(taskId)
 
 ## Extensions (Failure Cases)
-4a. Title is empty
+4a. Title is empty  
   4a1. System detects empty title.
   4a2. System displays error message.
   4a3. Use case ends. 
