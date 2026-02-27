@@ -7,7 +7,7 @@
 
 # Operation Contracts
 
-## 1. Operation Contract — createTask(title, description?, priorityLevel, dueDate?) 
+## 1. Operation Contract — `createTask(title, description?, priorityLevel, dueDate?)` 
 
 ### Preconditions
 - `title` is not null and not empty.
@@ -32,7 +32,7 @@
 - No `ActivityEntry` is created.
 - The system returns `displayError("Task title is required")`.
 
-## 2. Operation Contract — updateTask(taskId, title?, description?, priorityLevel?, dueDate?)
+## 2. Operation Contract — `updateTask(taskId, title?, description?, priorityLevel?, dueDate?)`
 
 ### Preconditions
 - A `Task t` exists such that `t.taskId = taskId`.
@@ -55,7 +55,7 @@
 - If input data is invalid → no changes occur.
 - No `ActivityEntry` is created.
 
-## 3. Operation Contract — changeTaskStatus(taskId, newStatus) 
+## 3. Operation Contract — `changeTaskStatus(taskId, newStatus)` 
 
 ### Preconditions
 - A `Task t` exists such that `t.taskId = taskId`.
