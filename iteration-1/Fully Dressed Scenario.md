@@ -39,9 +39,9 @@
 5. The system returns taskCreated(taskId)
 
 ## Extensions (Failure Cases)
-4a. Title is empty  
-  4a1. System detects empty title.
-  4a2. System displays error message.
+4a. Title is empty  <br>
+  4a1. System detects empty title. <br>
+  4a2. System displays error message.<br>
   4a3. Use case ends. 
 4b. Invalid priorityLevel
   4b1. System detects invalid priority.
