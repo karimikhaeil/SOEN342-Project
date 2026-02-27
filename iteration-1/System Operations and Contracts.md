@@ -1,22 +1,13 @@
 # System Operations and Operation Contracts
 
-## System Operations
-
-The following system operations are identified from the actor-to-system messages in the System Sequence Diagrams (SSDs):
-
-1. `createTask(title, description?, priorityLevel, dueDate?)`
-2. `updateTask(taskId, title?, description?, priorityLevel?, dueDate?)`
-3. `changeTaskStatus(taskId, newStatus)`
-
----
+## System Operations  
+1. createTask(title, description?, priorityLevel, dueDate?)`
+2. updateTask(taskId, title?, description?, priorityLevel?, dueDate?)`
+3. changeTaskStatus(taskId, newStatus)`
 
 # Operation Contracts
 
----
-
-## 1. Operation Contract — createTask(title, description?, priorityLevel, dueDate?)
-
-**Related Use Case:** Create Task  
+## 1. Operation Contract — createTask(title, description?, priorityLevel, dueDate?) 
 
 ### Preconditions
 - `title` is not null and not empty.
@@ -40,11 +31,7 @@ The following system operations are identified from the actor-to-system messages
 - No `Task` is created.
 - No `ActivityEntry` is created.
 
----
-
 ## 2. Operation Contract — updateTask(taskId, title?, description?, priorityLevel?, dueDate?)
-
-**Related Use Case:** Update Task  
 
 ### Preconditions
 - A `Task t` exists such that `t.taskId = taskId`.
@@ -67,11 +54,7 @@ The following system operations are identified from the actor-to-system messages
 - If input data is invalid → no changes occur.
 - No `ActivityEntry` is created.
 
----
-
-## 3. Operation Contract — changeTaskStatus(taskId, newStatus)
-
-**Related Use Case:** Change Task Status  
+## 3. Operation Contract — changeTaskStatus(taskId, newStatus) 
 
 ### Preconditions
 - A `Task t` exists such that `t.taskId = taskId`.
