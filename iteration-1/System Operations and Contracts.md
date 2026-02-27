@@ -1,9 +1,9 @@
 # System Operations and Operation Contracts
 
 ## System Operations  
-1. createTask(title, description?, priorityLevel, dueDate?)`
-2. updateTask(taskId, title?, description?, priorityLevel?, dueDate?)`
-3. changeTaskStatus(taskId, newStatus)`
+1. `createTask(title, description?, priorityLevel, dueDate?)`
+2. `updateTask(taskId, title?, description?, priorityLevel?, dueDate?)`
+3. `changeTaskStatus(taskId, newStatus)`
 
 # Operation Contracts
 
@@ -30,6 +30,7 @@
 ### Postconditions (Failure)
 - No `Task` is created.
 - No `ActivityEntry` is created.
+- The system returns `displayError("Task title is required")`.
 
 ## 2. Operation Contract — updateTask(taskId, title?, description?, priorityLevel?, dueDate?)
 
