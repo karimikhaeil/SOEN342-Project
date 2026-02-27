@@ -40,17 +40,29 @@
 
 ## Extensions (Failure Cases)
 4a. Title is empty
+
   4a1. System detects empty title.
+  
   4a2. System displays error message.
+  
   4a3. Use case ends.
+  
 4b. Invalid priorityLevel
+
   4b1. System detects invalid priority.
+  
   4b2. System displays error message.
+  
   4b3. Use case ends.
+  
 4c. Invalid dueDate
+
   4c1. System detects invalid date.
+  
   4c2. System displays error message.
+  
   4c3. Use case ends.
+  
 
 ## Failure Case
 1. The system detects that the title is empty or invalid
