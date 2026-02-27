@@ -1,28 +1,27 @@
 # Fully Dressed Use Case: Create Task  
 
-Primary Actor: User  
-Goal: Create a new task in the system  
-Scope: Personal Task Management System  
-Level: User goal  
+- Primary Actor: User  
+- Goal: Create a new task in the system  
+- Scope: Personal Task Management System  
+- Level: User goal  
 
 ## Preconditions
-The system is running  
-The user has access to the create task functionality  
+- The system is running  
+- The user has access to the create task functionality  
 
 ## Postconditions on Success  
-A new task is created  
-The task has: 
-- a unique taskId
-- title set to the provided value
-- status = open
-- creationDate = currentDateTime
-- priorityLevel, description, and dueDate set if provided
-
-The system returns taskCreated(taskId)
+- A new task is created  
+- The task has: 
+  - a unique taskId
+  - title set to the provided value
+  - status = open
+  - creationDate = currentDateTime
+  - priorityLevel, description, and dueDate set if provided
+- The system returns taskCreated(taskId)
 
 ## Postconditions on Failure
-No task is created  
-The system returns displayError("Task title is required")
+- No task is created  
+- The system returns displayError("Task title is required")
 
 ## Main Success Scenario
 1. The user initiates task creation
