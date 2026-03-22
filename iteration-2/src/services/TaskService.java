@@ -8,7 +8,7 @@ public class TaskService {
     private List<Task> tasks = new ArrayList<>();
     private Map<String, Project> projectRegistry = new HashMap<>();
 
-    // ── Search ──────────────────────────────────────────────────────────────
+    // Search 
 
     public List<Task> searchTasks(SearchCriteria criteria) {
         // No criteria = all open tasks sorted by dueDate ascending
@@ -45,7 +45,7 @@ public class TaskService {
             .collect(Collectors.toList());
     }
 
-    // ── Task creation ────────────────────────────────────────────────────────
+    // Task creation 
 
     public Task createTask(String title, String description,
                            PriorityLevel priority, LocalDate dueDate) {
@@ -72,7 +72,7 @@ public class TaskService {
         return task;
     }
 
-    // ── Project registry ─────────────────────────────────────────────────────
+    // Project registry 
 
     public Project resolveProject(String name) {
         // Project names are unique — reuse existing if found
@@ -81,7 +81,7 @@ public class TaskService {
             k -> new Project(UUID.randomUUID().toString(), name));
     }
 
-    // ── General ──────────────────────────────────────────────────────────────
+    // General
 
     public void addTask(Task task)         { tasks.add(task); }
     public List<Task> getAllTasks()        { return tasks; }
