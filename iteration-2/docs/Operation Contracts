@@ -1,21 +1,21 @@
-# Iteration 2 — Operation Contracts
+# Iteration 2 - Operation Contracts
 
-## OC4 — searchTasks(criteria)
+## OC4 - searchTasks(criteria)
 
 **Preconditions:**
 - criteria is null OR contains at least one valid field.
 
 **Postconditions (Success):**
 - Returns a list of Task objects matching all provided criteria.
-- If criteria is null → returns all tasks where status = open, sorted by dueDate ascending.
-- If criteria is provided → filters by: status, titleKeyword, startDate, endDate, dayOfWeek.
+- If criteria is null -> returns all tasks where status = open, sorted by dueDate ascending.
+- If criteria is provided -> filters by: status, titleKeyword, startDate, endDate, dayOfWeek.
 
 **Postconditions (Failure):**
-- If no tasks match → returns empty list.
+- If no tasks match -> returns empty list.
 
 ---
 
-## OC5 — exportToCSV(filePath)
+## OC5 - exportToCSV(filePath)
 
 **Preconditions:**
 - filePath is not null or empty.
@@ -27,11 +27,11 @@
 - Optional fields may be empty.
 
 **Postconditions (Failure):**
-- If file cannot be written → displayError("Export failed").
+- If file cannot be written -> displayError("Export failed").
 
 ---
 
-## OC6 — importFromCSV(filePath)
+## OC6 - importFromCSV(filePath)
 
 **Preconditions:**
 - filePath is not null and the file exists.
@@ -39,18 +39,18 @@
 
 **Postconditions (Success):**
 - For each valid row:
-  - If Project with given name does not exist → new Project is created.
-  - If Collaborator does not exist under that project → new Collaborator is created.
+  - If Project with given name does not exist -> new Project is created.
+  - If Collaborator does not exist under that project -> new Collaborator is created.
   - A new Task is created and linked to its Project.
 - Returns count of successfully imported tasks.
 
 **Postconditions (Failure):**
-- File not found → displayError("File not found").
-- Invalid row → row is skipped with a logged warning. Remaining rows continue to import.
+- File not found -> displayError("File not found").
+- Invalid row -> row is skipped with a logged warning. Remaining rows continue to import.
 
 ---
 
-## OC7 — createRecurringTask(title, priorityLevel, recurrencePattern)
+## OC7 - createRecurringTask(title, priorityLevel, recurrencePattern)
 
 **Preconditions:**
 - title is not null or empty.
@@ -65,12 +65,12 @@
 - An ActivityEntry is created with actionType = created.
 
 **Postconditions (Failure):**
-- If title is empty → displayError("Task title is required").
-- If recurrence pattern is invalid → displayError("Invalid recurrence pattern").
+- If title is empty -> displayError("Task title is required").
+- If recurrence pattern is invalid -> displayError("Invalid recurrence pattern").
 
 ---
 
-## OC8 — assignCollaborator(taskId, collaboratorId)
+## OC8 - assignCollaborator(taskId, collaboratorId)
 
 **Preconditions:**
 - A Task t exists with t.taskId = taskId.
@@ -85,5 +85,5 @@
 - An ActivityEntry is created with actionType = updated.
 
 **Postconditions (Failure):**
-- c.openTaskCount >= c.openTaskLimit → displayError("Collaborator has reached open task limit").
-- Task does not belong to a project → displayError("Task must belong to a project to have collaborators").
+- c.openTaskCount >= c.openTaskLimit -> displayError("Collaborator has reached open task limit").
+- Task does not belong to a project -> displayError("Task must belong to a project to have collaborators").
