@@ -113,30 +113,4 @@ public class CSVImporter {
 
         taskService.addTask(task);
     }
-
-    // Handles quoted CSV fields correctly
-    private String[] splitCSVLine(String line) {
-        java.util.List<String> result = new java.util.ArrayList<>();
-        boolean inQuotes = false;
-        StringBuilder sb = new StringBuilder();
-        for (char c : line.toCharArray()) {
-            if (c == '"') { inQuotes = !inQuotes; }
-            else if (c == ',' && !inQuotes) {
-                result.add(sb.toString().trim());
-                sb.setLength(0);
-            } else { sb.append(c); }
-        }
-        result.add(sb.toString().trim());
-        return result.toArray(new String[0]);
-    }
-
-    private String get(String[] cols, int i) {
-        return (i < cols.length) ? cols[i].trim() : "";
-    }
-
-    private String capitalize(String s) {
-        if (s == null || s.isBlank()) return s;
-        return s.substring(0, 1).toUpperCase()
-             + s.substring(1).toLowerCase();
-    }
 }
