@@ -46,6 +46,7 @@ public class CSVImporter {
 
         String taskName    = get(cols, 0);
         String description = get(cols, 1);
+        String subtaskName = get(cols, 2);
         String status      = get(cols, 3);
         String priority    = get(cols, 4);
         String dueDate     = get(cols, 5);
@@ -62,22 +63,21 @@ public class CSVImporter {
         try { pl = PriorityLevel.valueOf(priority.toLowerCase()); }
         catch (Exception e) { pl = PriorityLevel.medium; }
 
-        // Create task
-        Task task = new Task(UUID.randomUUID().toString(), taskName, pl);
-        task.setDescription(description);
-
-        // Set status
-        try { task.setStatus(TaskStatus.valueOf(status.toLowerCase())); }
-        catch (Exception e) { task.setStatus(TaskStatus.open); }
-
-        // Set due date
+        LocalDate parsedDueDate = null;
         if (!dueDate.isBlank()) {
-            try { task.setDueDate(LocalDate.parse(dueDate)); }
+            try { parsedDueDate = LocalDate.parse(dueDate); }
             catch (Exception e) {
                 System.out.println("Invalid date format for task: "
                     + taskName + ", skipping date.");
             }
         }
+
+        // Create task through the service layer so history stays consistent
+        Task task = taskService.createTask(taskName, description, pl, parsedDueDate);
+
+        // Set status
+        try { task.setStatus(TaskStatus.valueOf(status.toLowerCase())); }
+        catch (Exception e) { task.setStatus(TaskStatus.open); }
 
         // Resolve project (unique by name)
         if (!projectName.isBlank()) {
@@ -103,14 +103,39 @@ public class CSVImporter {
                 // Automatically create subtask for collaborator
                 if (collab.canAcceptTask()) {
                     task.addSubtaskForCollaborator(
-                        UUID.randomUUID().toString(), collab);
+                        UUID.randomUUID().toString(),
+                        subtaskName.isBlank() ? taskName : subtaskName,
+                        collab);
                 } else {
                     System.out.println("Warning: collaborator "
                         + collabName + " is at task limit, skipping link.");
                 }
             }
         }
+    }
 
-        taskService.addTask(task);
+    private String[] splitCSVLine(String line) {
+        return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+    }
+
+    private String get(String[] cols, int index) {
+        if (index < 0 || index >= cols.length) {
+            return "";
+        }
+
+        String value = cols[index].trim();
+        if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+            value = value.substring(1, value.length() - 1).replace("\"\"", "\"");
+        }
+        return value;
+    }
+
+    private String capitalize(String value) {
+        if (value == null || value.isBlank()) {
+            return "";
+        }
+
+        String normalized = value.trim().toLowerCase();
+        return Character.toUpperCase(normalized.charAt(0)) + normalized.substring(1);
     }
 }

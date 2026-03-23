@@ -42,14 +42,20 @@ public class Task {
     }
 
     public Subtask addSubtaskForCollaborator(String subtaskId,
-                                              Collaborator collaborator) {
+                                             Collaborator collaborator) {
+        return addSubtaskForCollaborator(subtaskId, this.title, collaborator);
+    }
+
+    public Subtask addSubtaskForCollaborator(String subtaskId,
+                                             String subtaskTitle,
+                                             Collaborator collaborator) {
         if (!collaborator.canAcceptTask()) {
             throw new IllegalStateException(
                 "Collaborator " + collaborator.getName()
                 + " has reached their open task limit of "
                 + collaborator.getOpenTaskLimit());
         }
-        Subtask s = new Subtask(subtaskId, this.title);
+        Subtask s = new Subtask(subtaskId, subtaskTitle);
         s.assignCollaborator(collaborator);
         collaborator.incrementOpenTasks();
         subtasks.add(s);
