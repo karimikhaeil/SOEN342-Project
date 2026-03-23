@@ -1,21 +1,53 @@
-# Iteration 2 — Task Management System
+# Iteration 2 - Task Management System
 
-## What's New
-- Recurring tasks (daily, weekly, monthly, custom)
-- Collaborators (Junior / Intermediate / Senior) with open task limits
-- Task search with criteria
-- Export tasks to CSV
-- Import tasks from CSV
+## Overview
+This iteration extends the task management system with a proof of concept for:
 
-## Folder Structure
-```
+- recurring tasks
+- collaborator assignment with workload limits
+- task search with filtering criteria
+- CSV import
+- CSV export
+
+## Project Structure
+```text
 iteration-2/
-├── diagrams/         
-├── docs/              
-└── src/               
+|-- README.md
+|-- Updated Domain Model.pdf
+|-- Updated Use Case Diagram.pdf
+|-- SSDs/
+|-- src/
+|   |-- Main.java
+|   |-- models/
+|   `-- services/
+```
+
+## How to Compile
+From the `iteration-2` folder, compile all Java source files into the `out` directory:
+
+```powershell
+javac -d out (Get-ChildItem -Recurse -File -Filter *.java -Path src | ForEach-Object { $_.FullName })
 ```
 
 ## How to Run
-1. Compile all `.java` files in `src/`
-2. Run `Main.java`
-3. The system will import from `tasks.csv`, run a search, and export to `output.csv`
+After compiling, run the program with:
+
+```powershell
+java -cp out Main
+```
+
+## Program Behavior
+When the program runs, it will:
+
+1. create sample manual tasks
+2. create a recurring task and generate occurrences
+3. create a demo `tasks.csv` file
+4. import tasks from that CSV file
+5. search and display open tasks
+6. search tasks by keyword
+7. export the resulting task list to `output.csv`
+
+## Notes
+- Source code is stored in `src/`
+- Compiled `.class` files are generated in `out/`
+- `tasks.csv` and `output.csv` are generated during the demo run
