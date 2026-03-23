@@ -5,12 +5,13 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        printSection("Task Management System");
 
         TaskService taskService = new TaskService();
         CSVImporter importer    = new CSVImporter(taskService);
         CSVExporter exporter    = new CSVExporter();
 
-        // 1. Manually create some tasks 
+        printSection("1. Creating Manual Tasks");
         Task t1 = taskService.createTask(
             "Fix login bug", "Critical auth issue",
             PriorityLevel.high,
@@ -26,7 +27,11 @@ public class Main {
             PriorityLevel.low,
             LocalDate.of(2025, 6, 20));
 
-        // 2. Create a recurring task
+        printTaskSummary(t1);
+        printTaskSummary(t2);
+        printTaskSummary(t3);
+
+        printSection("2. Creating a Recurring Task");
         RecurrencePattern pattern = new RecurrencePattern(
             "rp-001",
             RecurrenceType.weekly,
@@ -37,52 +42,60 @@ public class Main {
         Task recurring = taskService.createRecurringTask(
             "Weekly standup", "Team sync",
             PriorityLevel.low, pattern);
-        System.out.println("Recurring task occurrences generated: "
+        System.out.println("Created recurring task: " + recurring.getTitle());
+        System.out.println("Occurrences generated: "
             + recurring.getOccurrences().size());
 
-        // 3. Import from CSV 
-        // Creates tasks.csv first as a demo input file
+        printSection("3. Importing Tasks from CSV");
         createSampleCSV("tasks.csv");
-        importer.importTasks("tasks.csv");
+        int importedCount = importer.importTasks("tasks.csv");
+        System.out.println("Imported rows: " + importedCount);
 
-        // 4. Search 
-        System.out.println("\n── Search: all open tasks ──");
+        printSection("4. Search Results - Open Tasks");
         List<Task> results = taskService.searchTasks(null);
-        for (Task t : results) {
-            System.out.println("  " + t.getTitle()
-                + " | " + t.getStatus()
-                + " | due: " + t.getDueDate());
+        for (Task task : results) {
+            printTaskSummary(task);
         }
 
-        // 5. Search with criteria 
-        System.out.println("\n── Search: keyword 'test' ──");
+        printSection("5. Search Results - Keyword 'test'");
         SearchCriteria criteria = new SearchCriteria();
         criteria.setTitleKeyword("test");
         List<Task> filtered = taskService.searchTasks(criteria);
-        for (Task t : filtered) {
-            System.out.println("  " + t.getTitle());
+        for (Task task : filtered) {
+            System.out.println("- " + task.getTitle());
         }
 
-        // 6. Export all tasks to CSV 
+        printSection("6. Exporting Tasks");
         exporter.export(taskService.getAllTasks(), "output.csv");
     }
 
-    // Creates a sample CSV file to demonstrate import
     private static void createSampleCSV(String path) throws Exception {
         try (java.io.PrintWriter pw =
                 new java.io.PrintWriter(new java.io.FileWriter(path))) {
             pw.println("TaskName,Description,Subtask,Status,Priority,"
                      + "DueDate,ProjectName,ProjectDescription,"
                      + "Collaborator,CollaboratorCategory");
-            pw.println("Deploy backend,Push to prod,,open,high,"
+            pw.println("Deploy backend,Push to prod,Production rollout,open,high,"
                      + "2025-06-12,Project Alpha,Main backend project,"
                      + "Alice,Senior");
-            pw.println("Design mockups,UI screens,,open,medium,"
+            pw.println("Design mockups,UI screens,Landing page draft,open,medium,"
                      + "2025-06-18,Project Alpha,Main backend project,"
                      + "Bob,Junior");
             pw.println("Database migration,Move to new schema,,open,high,"
                      + "2025-06-08,Project Beta,Data migration project,,");
         }
-        System.out.println("tasks.csv created.");
+        System.out.println("Created demo CSV file: " + path);
+    }
+
+    private static void printSection(String title) {
+        System.out.println();
+        System.out.println("=== " + title + " ===");
+    }
+
+    private static void printTaskSummary(Task task) {
+        System.out.println("- " + task.getTitle()
+            + " | status: " + task.getStatus()
+            + " | priority: " + task.getPriorityLevel()
+            + " | due: " + task.getDueDate());
     }
 }

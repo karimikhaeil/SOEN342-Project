@@ -25,7 +25,7 @@ public class CSVExporter {
                 }
             }
         }
-        System.out.println("Export complete → " + filePath);
+        System.out.println("Export complete: " + filePath);
     }
 
     private String buildRow(Task task, Subtask subtask) {
