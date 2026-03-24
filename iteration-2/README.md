@@ -21,8 +21,6 @@ iteration-2/
 |   |-- models/
 |   `-- services/
 ```
-## UML Class Diagram
-![Class Diagram](ClassDiagram.png)
 
 ## How to Compile
 From the `iteration-2` folder, compile all Java source files into the `out` directory:
