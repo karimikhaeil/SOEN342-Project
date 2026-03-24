@@ -1,0 +1,247 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+package models {
+
+  enum TaskStatus {
+    open
+    completed
+    cancelled
+  }
+
+  enum PriorityLevel {
+    low
+    medium
+    high
+  }
+
+  enum SubtaskStatus {
+    open
+    completed
+  }
+
+  enum ActionType {
+    created
+    updated
+    completed
+    cancelled
+  }
+
+  enum RecurrenceType {
+    daily
+    weekly
+    monthly
+    custom
+  }
+
+  enum CollaboratorCategory {
+    Junior
+    Intermediate
+    Senior
+  }
+
+  class Tag {
+    -name: String
+    +Tag(name: String)
+    +getName(): String
+  }
+
+  class ActivityEntry {
+    -entryId: String
+    -timestamp: LocalDateTime
+    -description: String
+    -actionType: ActionType
+    +ActivityEntry(entryId: String, actionType: ActionType)
+    +getEntryId(): String
+    +getTimestamp(): LocalDateTime
+    +getDescription(): String
+    +getActionType(): ActionType
+    +setDescription(d: String): void
+  }
+
+  class Collaborator {
+    -collaboratorId: String
+    -name: String
+    -category: CollaboratorCategory
+    -openTaskCount: int
+    +Collaborator(id: String, name: String, category: CollaboratorCategory)
+    +getOpenTaskLimit(): int
+    +canAcceptTask(): boolean
+    +incrementOpenTasks(): void
+    +decrementOpenTasks(): void
+    +getCollaboratorId(): String
+    +getName(): String
+    +getCategory(): CollaboratorCategory
+    +setCategory(c: CollaboratorCategory): void
+    +getOpenTaskCount(): int
+  }
+
+  class Project {
+    -projectId: String
+    -name: String
+    -description: String
+    -collaborators: List<Collaborator>
+    +Project(projectId: String, name: String)
+    +addCollaborator(c: Collaborator): void
+    +findCollaboratorByName(name: String): Collaborator
+    +getProjectId(): String
+    +getName(): String
+    +getDescription(): String
+    +setDescription(d: String): void
+    +getCollaborators(): List<Collaborator>
+  }
+
+  class Subtask {
+    -subtaskId: String
+    -title: String
+    -status: SubtaskStatus
+    -assignedTo: Collaborator
+    +Subtask(subtaskId: String, title: String)
+    +assignCollaborator(c: Collaborator): void
+    +complete(): void
+    +getSubtaskId(): String
+    +getTitle(): String
+    +getStatus(): SubtaskStatus
+    +getAssignedTo(): Collaborator
+  }
+
+  class RecurrencePattern {
+    -patternId: String
+    -type: RecurrenceType
+    -interval: int
+    -startDate: LocalDate
+    -endDate: LocalDate
+    +RecurrencePattern(id: String, type: RecurrenceType, start: LocalDate, end: LocalDate, interval: int)
+    +generateOccurrences(baseTitle: String): List<TaskOccurrence>
+    +getPatternId(): String
+    +getType(): RecurrenceType
+    +getStartDate(): LocalDate
+    +getEndDate(): LocalDate
+    +getInterval(): int
+  }
+
+  class TaskOccurrence {
+    -occurrenceId: String
+    -title: String
+    -dueDate: LocalDate
+    -status: TaskStatus
+    +TaskOccurrence(id: String, title: String, dueDate: LocalDate)
+    +complete(): void
+    +getOccurrenceId(): String
+    +getTitle(): String
+    +getDueDate(): LocalDate
+    +getStatus(): TaskStatus
+  }
+
+  class Task {
+    -taskId: String
+    -title: String
+    -description: String
+    -creationDate: LocalDateTime
+    -dueDate: LocalDate
+    -priorityLevel: PriorityLevel
+    -status: TaskStatus
+    -isRecurring: boolean
+    +Task(taskId: String, title: String, priorityLevel: PriorityLevel)
+    +setRecurrencePattern(p: RecurrencePattern): void
+    +addSubtaskForCollaborator(subtaskId: String, c: Collaborator): Subtask
+    +addActivityEntry(e: ActivityEntry): void
+    +getTaskId(): String
+    +getTitle(): String
+    +setTitle(t: String): void
+    +getDescription(): String
+    +setDescription(d: String): void
+    +getDueDate(): LocalDate
+    +setDueDate(d: LocalDate): void
+    +getPriorityLevel(): PriorityLevel
+    +setPriorityLevel(p: PriorityLevel): void
+    +getStatus(): TaskStatus
+    +setStatus(s: TaskStatus): void
+    +isRecurring(): boolean
+    +getRecurrencePattern(): RecurrencePattern
+    +getOccurrences(): List<TaskOccurrence>
+    +getSubtasks(): List<Subtask>
+    +getTags(): List<Tag>
+    +getHistory(): List<ActivityEntry>
+    +getProject(): Project
+    +setProject(p: Project): void
+  }
+}
+
+package services {
+
+  class SearchCriteria {
+    -startDate: LocalDate
+    -endDate: LocalDate
+    -titleKeyword: String
+    -status: TaskStatus
+    -dayOfWeek: String
+    +getStartDate(): LocalDate
+    +setStartDate(d: LocalDate): void
+    +getEndDate(): LocalDate
+    +setEndDate(d: LocalDate): void
+    +getTitleKeyword(): String
+    +setTitleKeyword(k: String): void
+    +getStatus(): TaskStatus
+    +setStatus(s: TaskStatus): void
+    +getDayOfWeek(): String
+    +setDayOfWeek(d: String): void
+  }
+
+  class CSVExporter {
+    +export(tasks: List<Task>, filePath: String): void
+    -buildRow(task: Task, subtask: Subtask): String
+    -escape(value: String): String
+  }
+
+  class CSVImporter {
+    -taskService: TaskService
+    +CSVImporter(taskService: TaskService)
+    +importTasks(filePath: String): int
+    -processRow(line: String): void
+    -splitCSVLine(line: String): String[]
+    -get(cols: String[], i: int): String
+    -capitalize(s: String): String
+  }
+
+  class TaskService {
+    -tasks: List<Task>
+    -projectRegistry: Map<String, Project>
+    +searchTasks(criteria: SearchCriteria): List<Task>
+    +createTask(title: String, desc: String, priority: PriorityLevel, dueDate: LocalDate): Task
+    +createRecurringTask(title: String, desc: String, priority: PriorityLevel, pattern: RecurrencePattern): Task
+    +resolveProject(name: String): Project
+    +addTask(task: Task): void
+    +getAllTasks(): List<Task>
+    +getProjectRegistry(): Map<String, Project>
+  }
+}
+
+'Enum relationships
+Task --> TaskStatus
+Task --> PriorityLevel
+TaskOccurrence --> TaskStatus
+Subtask --> SubtaskStatus
+ActivityEntry --> ActionType
+Collaborator --> CollaboratorCategory
+RecurrencePattern --> RecurrenceType
+
+'Model relationships
+Task --> "0..1" RecurrencePattern
+Task --> "0..*" TaskOccurrence
+Task --> "0..*" Subtask
+Task --> "0..*" ActivityEntry
+Task --> "0..*" Tag
+Task --> "0..1" Project
+Project --> "0..*" Collaborator
+Subtask --> "0..1" Collaborator
+
+'Service relationships
+TaskService --> Task
+TaskService --> Project
+TaskService --> SearchCriteria
+CSVImporter --> TaskService
+CSVExporter --> Task
+CSVExporter --> Subtask
+@enduml
