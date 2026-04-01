@@ -10,6 +10,7 @@ public class Main {
         TaskService taskService = new TaskService();
         CSVImporter importer    = new CSVImporter(taskService);
         CSVExporter exporter    = new CSVExporter();
+        PersistenceManager persistence = new PersistenceManager();
 
         printSection("1. Creating Manual Tasks");
         Task t1 = taskService.createTask(
@@ -81,6 +82,9 @@ public class Main {
                     + collab.getOpenTaskLimit());
             }
         }
+
+        printSection("8. Saving System State");
+        persistence.saveState(taskService, "data.json");
     }
 
     private static void createSampleCSV(String path) throws Exception {

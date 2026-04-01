@@ -1,0 +1,107 @@
+{
+  "tasks": [
+    {
+      "taskId": "caceaa72-300a-4ee4-855a-a85ff1f976c0",
+      "title": "Fix login bug",
+      "description": "Critical auth issue",
+      "creationDate": "2026-04-01T19:31:33.3786467",
+      "dueDate": "2025-06-10",
+      "priorityLevel": "high",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskId": "ba70f2f9-d5f1-450a-a849-72df385816fa",
+      "title": "Write unit tests",
+      "description": "Cover all service methods",
+      "creationDate": "2026-04-01T19:31:33.3841247",
+      "dueDate": "2025-06-15",
+      "priorityLevel": "medium",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskId": "adf9dfa3-097f-4cfc-acbe-13b634385d67",
+      "title": "Update documentation",
+      "description": "",
+      "creationDate": "2026-04-01T19:31:33.3851358",
+      "dueDate": "2025-06-20",
+      "priorityLevel": "low",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskId": "1cfd0f64-af33-4a04-9052-6b6239274a9c",
+      "title": "Weekly standup",
+      "description": "Team sync",
+      "creationDate": "2026-04-01T19:31:33.3952105",
+      "dueDate": "",
+      "priorityLevel": "low",
+      "status": "open",
+      "isRecurring": true,
+      "projectId": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskId": "56b36dec-974c-4b63-ae96-d8a0f9527c43",
+      "title": "Deploy backend",
+      "description": "Push to prod",
+      "creationDate": "2026-04-01T19:31:33.4163045",
+      "dueDate": "2025-06-12",
+      "priorityLevel": "high",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": "3b22ac4b-a934-40bd-ad0c-46f0b3da3ed0",
+      "tags": [],
+      "subtasks": ["Production rollout"]
+    },
+    {
+      "taskId": "3f3a5329-a768-4d26-b62a-0c9d8d204847",
+      "title": "Design mockups",
+      "description": "UI screens",
+      "creationDate": "2026-04-01T19:31:33.4354103",
+      "dueDate": "2025-06-18",
+      "priorityLevel": "medium",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": "3b22ac4b-a934-40bd-ad0c-46f0b3da3ed0",
+      "tags": [],
+      "subtasks": ["Landing page draft"]
+    },
+    {
+      "taskId": "4af3366c-a0f9-4c89-9cf0-a002c01d47a2",
+      "title": "Database migration",
+      "description": "Move to new schema",
+      "creationDate": "2026-04-01T19:31:33.437402",
+      "dueDate": "2025-06-08",
+      "priorityLevel": "high",
+      "status": "open",
+      "isRecurring": false,
+      "projectId": "94d3ee73-ab0a-44a9-88ef-5dc012016a16",
+      "tags": [],
+      "subtasks": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "94d3ee73-ab0a-44a9-88ef-5dc012016a16",
+      "name": "Project Beta",
+      "description": "Data migration project"
+    },
+    {
+      "id": "3b22ac4b-a934-40bd-ad0c-46f0b3da3ed0",
+      "name": "Project Alpha",
+      "description": "Main backend project"
+    }
+  ]
+}
