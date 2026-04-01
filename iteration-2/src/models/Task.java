@@ -49,6 +49,12 @@ public class Task {
     public Subtask addSubtaskForCollaborator(String subtaskId,
                                              String subtaskTitle,
                                              Collaborator collaborator) {
+        // OCL Constraint: A task cannot have more than 20 sub-tasks
+        if (subtasks.size() >= 20) {
+            throw new IllegalStateException(
+                "Task '" + this.title 
+                + "' has reached the maximum of 20 subtasks.");
+        }
         if (!collaborator.canAcceptTask()) {
             throw new IllegalStateException(
                 "Collaborator " + collaborator.getName()

@@ -53,6 +53,17 @@ public class TaskService {
         if (title == null || title.isBlank())
             throw new IllegalArgumentException("Task title is required");
 
+        // OCL Constraint: The number of open tasks without a due date should not exceed 50
+        if (dueDate == null) {
+            long openWithoutDueDate = tasks.stream()
+                .filter(t -> t.getStatus() == TaskStatus.open && t.getDueDate() == null)
+                .count();
+            if (openWithoutDueDate >= 50) {
+                throw new IllegalStateException(
+                    "System has reached the maximum of 50 open tasks without a due date.");
+            }
+        }
+
         String id = UUID.randomUUID().toString();
         Task task = new Task(id, title, priority);
         task.setDescription(description);
@@ -87,4 +98,27 @@ public class TaskService {
     public void addTask(Task task)         { tasks.add(task); }
     public List<Task> getAllTasks()        { return tasks; }
     public Map<String, Project> getProjectRegistry() { return projectRegistry; }
+
+    /**
+     * Retrieves all unique collaborators from all subtasks in the system.
+     * @return List of unique collaborators
+     */
+    public List<Collaborator> getAllCollaborators() {
+        return tasks.stream()
+            .flatMap(t -> t.getSubtasks().stream())
+            .map(Subtask::getAssignedTo)
+            .filter(c -> c != null)
+            .distinct()
+            .toList();
+    }
+
+    /**
+     * Finds all collaborators who are overloaded (open task count > category limit).
+     * @return List of overloaded collaborators
+     */
+    public List<Collaborator> getOverloadedCollaborators() {
+        return getAllCollaborators().stream()
+            .filter(c -> c.getOpenTaskCount() > c.getOpenTaskLimit())
+            .toList();
+    }
 }
