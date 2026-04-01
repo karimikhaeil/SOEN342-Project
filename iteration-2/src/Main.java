@@ -67,6 +67,20 @@ public class Main {
 
         printSection("6. Exporting Tasks");
         exporter.export(taskService.getAllTasks(), "output.csv");
+
+        printSection("7. Checking Overloaded Collaborators");
+        List<Collaborator> overloaded = taskService.getOverloadedCollaborators();
+        if (overloaded.isEmpty()) {
+            System.out.println("No overloaded collaborators.");
+        } else {
+            System.out.println("Found " + overloaded.size() + " overloaded collaborator(s):");
+            for (Collaborator collab : overloaded) {
+                System.out.println("- " + collab.getName() 
+                    + " (" + collab.getCategory() + "): "
+                    + collab.getOpenTaskCount() + " open tasks exceeds limit of "
+                    + collab.getOpenTaskLimit());
+            }
+        }
     }
 
     private static void createSampleCSV(String path) throws Exception {
