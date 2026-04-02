@@ -10,6 +10,7 @@ public class Main {
         TaskService taskService = new TaskService();
         CSVImporter importer    = new CSVImporter(taskService);
         CSVExporter exporter    = new CSVExporter();
+        CalendarExporter calendarExporter = new CalendarExporter();
         PersistenceManager persistence = new PersistenceManager();
 
         printSection("1. Creating Manual Tasks");
@@ -69,10 +70,20 @@ public class Main {
         printSection("6. Exporting Tasks");
         exporter.export(taskService.getAllTasks(), "output.csv");
 
-        printSection("7. Checking Overloaded Collaborators");
+        printSection("7. Exporting Calendar Files");
+        calendarExporter.exportTask(t1, "single-task.ics");
+        calendarExporter.exportProjectTasks(
+            "Project Alpha",
+            taskService.getAllTasks(),
+            "project-alpha.ics"
+        );
+        calendarExporter.exportFilteredTasks(filtered, "filtered-results.ics");
+
+        printSection("8. Checking Overloaded Collaborators");
         List<Collaborator> overloaded = taskService.getOverloadedCollaborators();
         if (overloaded.isEmpty()) {
             System.out.println("No overloaded collaborators.");
+            System.out.println("Current assignment rules prevent overload in normal task assignment.");
         } else {
             System.out.println("Found " + overloaded.size() + " overloaded collaborator(s):");
             for (Collaborator collab : overloaded) {
@@ -83,7 +94,7 @@ public class Main {
             }
         }
 
-        printSection("8. Saving System State");
+        printSection("9. Saving System State");
         persistence.saveState(taskService, "data.json");
     }
 

@@ -82,18 +82,14 @@ public class PersistenceManager {
      * @throws IOException if file reading fails
      */
     public TaskService loadState(String filePath) throws IOException {
-        TaskService taskService = new TaskService();
-        
         if (!Files.exists(Paths.get(filePath))) {
             System.out.println("Data file not found. Starting with empty system.");
-            return taskService;
+            return new TaskService();
         }
-
-        String content = Files.readString(Paths.get(filePath));
-        // TODO: Implement JSON parsing to restore full state
-        // For now, returning empty service
-        System.out.println("Data loaded from: " + filePath);
-        return taskService;
+        throw new UnsupportedOperationException(
+            "Loading persisted state is not implemented yet. "
+            + "The persistence layer currently supports saving to JSON only."
+        );
     }
 
     /**
