@@ -1,4 +1,4 @@
-# SOEN 342 – Task Management System — Iteration 3
+Iteration 3 - Deployment and OCL
 
 ## What's New
 
