@@ -15,17 +15,20 @@
 iteration-3/
 ├── OCL_Constraints.md
 ├── README.md
+├── Sequence Diagram for the Sample Export Functionality.pdf
+├── Updated UML Class Diagram.pdf
+├── Updated Use Case Diagram.pdf
 ├── src/
 │   ├── Main.java
 │   ├── gateway/
-│   │   ├── ICalGateway.java       ← Gateway interface
-│   │   └── ICalGatewayImpl.java   ← RFC 5545 iCal writer
-│   ├── models/                    ← All domain models (updated from iter 2)
+│   │   ├── ICalGateway.java      
+│   │   └── ICalGatewayImpl.java  
+│   ├── models/                   
 │   ├── persistence/
-│   │   ├── TaskRepository.java    ← Repository interface
+│   │   ├── TaskRepository.java   
 │   │   └── JsonTaskRepository.java
 │   └── services/
-│       └── TaskService.java       ← Updated with all iter 3 features
+│       └── TaskService.java      
 ```
 
 ## How to Compile & Run
