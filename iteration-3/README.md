@@ -30,10 +30,6 @@ iteration-3/
 
 ## How to Compile & Run
 
-### Requirements
-- Java 11 or higher
-- No external libraries required
-
 ### Compile 
 ```bash
 cd src
