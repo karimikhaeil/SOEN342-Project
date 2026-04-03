@@ -7,14 +7,6 @@ import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
 
-/**
- * File-based persistence using a hand-rolled JSON serialiser.
- * No external dependencies — compiles with plain javac.
- *
- * Stores data in two files under the configured data directory:
- *   tasks.json    – all tasks (subtasks embedded)
- *   projects.json – project registry (collaborators embedded)
- */
 public class JsonTaskRepository implements TaskRepository {
 
     private final String dataDir;
@@ -26,7 +18,7 @@ public class JsonTaskRepository implements TaskRepository {
         new File(dataDir).mkdirs();
     }
 
-    // ── Save ─────────────────────────────────────────────────────────────
+    // Save
 
     @Override
     public void save(List<Task> tasks, Map<String, Project> projects)
@@ -58,7 +50,7 @@ public class JsonTaskRepository implements TaskRepository {
         write(PROJECTS_FILE, sb.toString());
     }
 
-    // ── Load ─────────────────────────────────────────────────────────────
+    // Load 
 
     @Override
     public List<Task> loadTasks() throws IOException {
@@ -76,7 +68,7 @@ public class JsonTaskRepository implements TaskRepository {
         return parseProjects(json);
     }
 
-    // ── Serialisation (Task → JSON) ───────────────────────────────────────
+    // Serialisation (Task → JSON)
 
     private String taskToJson(Task t) {
         StringBuilder sb = new StringBuilder("  {");
@@ -133,7 +125,7 @@ public class JsonTaskRepository implements TaskRepository {
              + "}";
     }
 
-    // ── Deserialisation (JSON → Task) ─────────────────────────────────────
+    // Deserialisation (JSON → Task) 
 
     private List<Task> parseTasks(String json) {
         List<Task> tasks = new ArrayList<>();
@@ -222,15 +214,6 @@ public class JsonTaskRepository implements TaskRepository {
             p.addCollaborator(collab);
         }
         return p;
-    }
-
-    // ── Minimal JSON utilities ─────────────────────────────────────────────
-
-    private String jf(String key, String value) {
-        if (value == null || value.equals("null"))
-            return "\"" + key + "\":null";
-        return "\"" + key + "\":\"" + value.replace("\\", "\\\\")
-                                           .replace("\"", "\\\"") + "\"";
     }
 
     private String extractString(String json, String key) {
