@@ -279,6 +279,21 @@ public class JsonTaskRepository implements TaskRepository {
         return items;
     }
 
+    private String jf(String key, String value) {
+        if (value == null) {
+            return "\"" + key + "\":null";
+        }
+        return "\"" + key + "\":\"" + escapeJson(value) + "\"";
+    }
+
+    private String escapeJson(String value) {
+        return value
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r");
+    }
+
     private void write(String filename, String content) throws IOException {
         Files.write(Paths.get(dataDir, filename), content.getBytes());
     }

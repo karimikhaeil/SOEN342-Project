@@ -3,7 +3,6 @@ package models;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class RecurrencePattern {
     private String patternId;
@@ -16,10 +15,10 @@ public class RecurrencePattern {
                              LocalDate startDate, LocalDate endDate,
                              int interval) {
         this.patternId = patternId;
-        this.type      = type;
+        this.type = type;
         this.startDate = startDate;
-        this.endDate   = endDate;
-        this.interval  = interval;
+        this.endDate = endDate;
+        this.interval = interval;
     }
 
     public List<TaskOccurrence> generateOccurrences(String baseTitle) {
@@ -31,18 +30,18 @@ public class RecurrencePattern {
             String id = patternId + "-occ" + count++;
             occurrences.add(new TaskOccurrence(id, baseTitle, current));
             switch (type) {
-                case daily:   current = current.plusDays(interval);   break;
-                case weekly:  current = current.plusWeeks(interval);  break;
-                case monthly: current = current.plusMonths(interval); break;
-                default:      current = current.plusDays(interval);   break;
+                case daily -> current = current.plusDays(interval);
+                case weekly -> current = current.plusWeeks(interval);
+                case monthly -> current = current.plusMonths(interval);
+                default -> current = current.plusDays(interval);
             }
         }
         return occurrences;
     }
 
-    public String getPatternId()    { return patternId; }
+    public String getPatternId() { return patternId; }
     public RecurrenceType getType() { return type; }
     public LocalDate getStartDate() { return startDate; }
-    public LocalDate getEndDate()   { return endDate; }
-    public int getInterval()        { return interval; }
+    public LocalDate getEndDate() { return endDate; }
+    public int getInterval() { return interval; }
 }

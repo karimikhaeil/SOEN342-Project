@@ -10,18 +10,17 @@ public class TaskOccurrence {
 
     public TaskOccurrence(String occurrenceId, String title, LocalDate dueDate) {
         this.occurrenceId = occurrenceId;
-        this.title        = title;
-        this.dueDate      = dueDate;
-        this.status       = TaskStatus.open;
+        this.title = title;
+        this.dueDate = dueDate;
+        this.status = TaskStatus.open;
     }
 
-    // Completing one occurrence does NOT affect others
     public void complete() {
         this.status = TaskStatus.completed;
     }
 
     public String getOccurrenceId() { return occurrenceId; }
-    public String getTitle()        { return title; }
-    public LocalDate getDueDate()   { return dueDate; }
-    public TaskStatus getStatus()   { return status; }
+    public String getTitle() { return title; }
+    public LocalDate getDueDate() { return dueDate; }
+    public TaskStatus getStatus() { return status; }
 }

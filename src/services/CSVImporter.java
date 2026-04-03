@@ -15,16 +15,17 @@ public class CSVImporter {
 
     public int importTasks(String filePath) throws IOException {
         File file = new File(filePath);
-        if (!file.exists())
+        if (!file.exists()) {
             throw new FileNotFoundException("File not found: " + filePath);
+        }
 
         int count = 0;
-        try (BufferedReader reader =
-                new BufferedReader(new FileReader(file))) {
-
-            String line = reader.readLine(); // skip header row
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
-                if (line.isBlank()) continue;
+                if (line.isBlank()) {
+                    continue;
+                }
                 try {
                     processRow(line);
                     count++;
@@ -39,82 +40,86 @@ public class CSVImporter {
     }
 
     private void processRow(String line) {
-        // Columns: TaskName,Description,Subtask,Status,Priority,
-        //          DueDate,ProjectName,ProjectDescription,
-        //          Collaborator,CollaboratorCategory
-        String[] cols = splitCSVLine(line);
+        String[] cols = splitCsvLine(line);
 
-        String taskName    = get(cols, 0);
+        String taskName = get(cols, 0);
         String description = get(cols, 1);
         String subtaskName = get(cols, 2);
-        String status      = get(cols, 3);
-        String priority    = get(cols, 4);
-        String dueDate     = get(cols, 5);
+        String status = get(cols, 3);
+        String priority = get(cols, 4);
+        String dueDate = get(cols, 5);
         String projectName = get(cols, 6);
         String projectDesc = get(cols, 7);
-        String collabName  = get(cols, 8);
-        String collabCat   = get(cols, 9);
+        String collaboratorName = get(cols, 8);
+        String collaboratorCategory = get(cols, 9);
 
-        if (taskName.isBlank())
+        if (taskName.isBlank()) {
             throw new IllegalArgumentException("TaskName is required");
+        }
 
-        // Resolve priority
-        PriorityLevel pl;
-        try { pl = PriorityLevel.valueOf(priority.toLowerCase()); }
-        catch (Exception e) { pl = PriorityLevel.medium; }
+        PriorityLevel priorityLevel;
+        try {
+            priorityLevel = PriorityLevel.valueOf(priority.toLowerCase());
+        } catch (Exception e) {
+            priorityLevel = PriorityLevel.medium;
+        }
 
         LocalDate parsedDueDate = null;
         if (!dueDate.isBlank()) {
-            try { parsedDueDate = LocalDate.parse(dueDate); }
-            catch (Exception e) {
+            try {
+                parsedDueDate = LocalDate.parse(dueDate);
+            } catch (Exception e) {
                 System.out.println("Invalid date format for task: "
                     + taskName + ", skipping date.");
             }
         }
 
-        // Create task through the service layer so history stays consistent
-        Task task = taskService.createTask(taskName, description, pl, parsedDueDate);
+        Task task = taskService.createTask(taskName, description, priorityLevel, parsedDueDate);
 
-        // Set status
-        try { task.setStatus(TaskStatus.valueOf(status.toLowerCase())); }
-        catch (Exception e) { task.setStatus(TaskStatus.open); }
+        try {
+            task.setStatus(TaskStatus.valueOf(status.toLowerCase()));
+        } catch (Exception e) {
+            task.setStatus(TaskStatus.open);
+        }
 
-        // Resolve project (unique by name)
         if (!projectName.isBlank()) {
             Project project = taskService.resolveProject(projectName);
-            if (!projectDesc.isBlank())
+            if (!projectDesc.isBlank()) {
                 project.setDescription(projectDesc);
+            }
             task.setProject(project);
 
-            // Resolve collaborator under that project
-            if (!collabName.isBlank()) {
-                Collaborator collab =
-                    project.findCollaboratorByName(collabName);
-                if (collab == null) {
-                    CollaboratorCategory cat = CollaboratorCategory.Junior;
+            if (!collaboratorName.isBlank()) {
+                Collaborator collaborator = project.findCollaboratorByName(collaboratorName);
+                if (collaborator == null) {
+                    CollaboratorCategory category = CollaboratorCategory.Junior;
                     try {
-                        cat = CollaboratorCategory.valueOf(
-                            capitalize(collabCat));
-                    } catch (Exception ignored) {}
-                    collab = new Collaborator(
-                        UUID.randomUUID().toString(), collabName, cat);
-                    project.addCollaborator(collab);
+                        category = CollaboratorCategory.valueOf(capitalize(collaboratorCategory));
+                    } catch (Exception ignored) {
+                    }
+                    collaborator = new Collaborator(
+                        UUID.randomUUID().toString(),
+                        collaboratorName,
+                        category
+                    );
+                    project.addCollaborator(collaborator);
                 }
-                // Automatically create subtask for collaborator
-                if (collab.canAcceptTask()) {
+
+                if (collaborator.canAcceptTask()) {
                     task.addSubtaskForCollaborator(
                         UUID.randomUUID().toString(),
                         subtaskName.isBlank() ? taskName : subtaskName,
-                        collab);
+                        collaborator
+                    );
                 } else {
                     System.out.println("Warning: collaborator "
-                        + collabName + " is at task limit, skipping link.");
+                        + collaboratorName + " is at task limit, skipping link.");
                 }
             }
         }
     }
 
-    private String[] splitCSVLine(String line) {
+    private String[] splitCsvLine(String line) {
         return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
     }
 
@@ -134,7 +139,6 @@ public class CSVImporter {
         if (value == null || value.isBlank()) {
             return "";
         }
-
         String normalized = value.trim().toLowerCase();
         return Character.toUpperCase(normalized.charAt(0)) + normalized.substring(1);
     }

@@ -1,4 +1,9 @@
-iteration-2/out/
+out/
+data/
 *.class
+*.ics
+output.csv
+tasks.csv
+iteration-2/out/
 iteration-2/output.csv
 iteration-2/tasks.csv

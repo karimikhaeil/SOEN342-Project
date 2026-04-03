@@ -12,15 +12,14 @@ public class CSVExporter {
       + "Collaborator,CollaboratorCategory";
 
     public void export(List<Task> tasks, String filePath) throws IOException {
-        try (PrintWriter writer =
-                new PrintWriter(new FileWriter(filePath))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println(HEADER);
             for (Task task : tasks) {
                 if (task.getSubtasks().isEmpty()) {
                     writer.println(buildRow(task, null));
                 } else {
-                    for (Subtask sub : task.getSubtasks()) {
-                        writer.println(buildRow(task, sub));
+                    for (Subtask subtask : task.getSubtasks()) {
+                        writer.println(buildRow(task, subtask));
                     }
                 }
             }
@@ -42,7 +41,7 @@ public class CSVExporter {
         if (subtask != null) {
             subtaskTitle = escape(subtask.getTitle());
             if (subtask.getAssignedTo() != null) {
-                collaborator    = escape(subtask.getAssignedTo().getName());
+                collaborator = escape(subtask.getAssignedTo().getName());
                 collaboratorCat = subtask.getAssignedTo().getCategory().name();
             }
         }
@@ -60,10 +59,12 @@ public class CSVExporter {
     }
 
     private String escape(String value) {
-        if (value == null) return "";
-        if (value.contains(",") || value.contains("\"")
-                || value.contains("\n"))
+        if (value == null) {
+            return "";
+        }
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
             return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
         return value;
     }
 }
