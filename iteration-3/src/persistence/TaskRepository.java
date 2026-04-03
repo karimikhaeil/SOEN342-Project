@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Persistence repository interface.
- * The domain and service layers depend only on this interface,
- * keeping them independent of any concrete storage technology.
- */
 public interface TaskRepository {
 
     /** Persist the full task list and project registry. */
