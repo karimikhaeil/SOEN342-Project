@@ -8,9 +8,13 @@ public class ActivityEntry {
     private LocalDateTime timestamp;
 
     public ActivityEntry(String entryId, ActionType actionType) {
+        this(entryId, actionType, LocalDateTime.now());
+    }
+
+    public ActivityEntry(String entryId, ActionType actionType, LocalDateTime timestamp) {
         this.entryId = entryId;
         this.actionType = actionType;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = timestamp;
     }
 
     public String getEntryId() { return entryId; }

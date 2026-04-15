@@ -41,6 +41,17 @@ public class Task {
         this.occurrences = pattern.generateOccurrences(this.title);
     }
 
+    public void addSubtask(Subtask subtask) {
+        if (subtask == null) {
+            throw new IllegalArgumentException("Subtask is required");
+        }
+        if (subtasks.size() >= 20) {
+            throw new IllegalStateException(
+                "Task '" + this.title + "' has reached the maximum of 20 subtasks.");
+        }
+        subtasks.add(subtask);
+    }
+
     public Subtask addSubtaskForCollaborator(String subtaskId,
                                              Collaborator collaborator) {
         return addSubtaskForCollaborator(subtaskId, this.title, collaborator);
@@ -49,18 +60,51 @@ public class Task {
     public Subtask addSubtaskForCollaborator(String subtaskId,
                                              String subtaskTitle,
                                              Collaborator collaborator) {
+        if (subtasks.size() >= 20) {
+            throw new IllegalStateException(
+                "Task '" + this.title + "' has reached the maximum of 20 subtasks.");
+        }
         if (!collaborator.canAcceptTask()) {
             throw new IllegalStateException(
                 "Collaborator " + collaborator.getName()
                 + " has reached their open task limit of "
-                + collaborator.getOpenTaskLimit()
-            );
+                + collaborator.getOpenTaskLimit());
         }
         Subtask subtask = new Subtask(subtaskId, subtaskTitle);
         subtask.assignCollaborator(collaborator);
         collaborator.incrementOpenTasks();
         subtasks.add(subtask);
         return subtask;
+    }
+
+    public void addTag(Tag tag) {
+        if (tag == null || tag.getName() == null || tag.getName().isBlank()) {
+            throw new IllegalArgumentException("Tag name is required");
+        }
+        boolean exists = tags.stream()
+            .anyMatch(existing -> existing.getName().equalsIgnoreCase(tag.getName()));
+        if (!exists) {
+            tags.add(tag);
+        }
+    }
+
+    public void removeTag(String tagName) {
+        if (tagName == null || tagName.isBlank()) {
+            return;
+        }
+        tags.removeIf(tag -> tag.getName().equalsIgnoreCase(tagName));
+    }
+
+    public void changeStatus(TaskStatus newStatus) {
+        this.status = newStatus;
+    }
+
+    public void reopen() {
+        this.status = TaskStatus.open;
+    }
+
+    public boolean hasDueDate() {
+        return dueDate != null;
     }
 
     public void addActivityEntry(ActivityEntry entry) {
@@ -73,6 +117,7 @@ public class Task {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
     public LocalDateTime getCreationDate() { return creationDate; }
+    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
     public PriorityLevel getPriorityLevel() { return priorityLevel; }
@@ -80,8 +125,10 @@ public class Task {
     public TaskStatus getStatus() { return status; }
     public void setStatus(TaskStatus status) { this.status = status; }
     public boolean isRecurring() { return isRecurring; }
+    public void setRecurring(boolean recurring) { this.isRecurring = recurring; }
     public RecurrencePattern getRecurrencePattern() { return recurrencePattern; }
     public List<TaskOccurrence> getOccurrences() { return occurrences; }
+    public void setOccurrences(List<TaskOccurrence> occurrences) { this.occurrences = occurrences; }
     public List<Subtask> getSubtasks() { return subtasks; }
     public List<Tag> getTags() { return tags; }
     public List<ActivityEntry> getHistory() { return history; }
