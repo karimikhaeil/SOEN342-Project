@@ -3,7 +3,6 @@ package services;
 import models.*;
 import java.io.*;
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class CSVImporter {
 
@@ -21,7 +20,8 @@ public class CSVImporter {
 
         int count = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line = reader.readLine();
+            reader.readLine();
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (line.isBlank()) {
                     continue;
@@ -77,45 +77,38 @@ public class CSVImporter {
         Task task = taskService.createTask(taskName, description, priorityLevel, parsedDueDate);
 
         try {
-            task.setStatus(TaskStatus.valueOf(status.toLowerCase()));
+            taskService.changeTaskStatus(task.getTaskId(), TaskStatus.valueOf(status.toLowerCase()));
         } catch (Exception e) {
-            task.setStatus(TaskStatus.open);
+            taskService.changeTaskStatus(task.getTaskId(), TaskStatus.open);
         }
 
         if (!projectName.isBlank()) {
-            Project project = taskService.resolveProject(projectName);
-            if (!projectDesc.isBlank()) {
-                project.setDescription(projectDesc);
-            }
-            task.setProject(project);
+            Project project = taskService.createProject(projectName, projectDesc);
+            taskService.assignTaskToProject(task.getTaskId(), project.getName());
 
             if (!collaboratorName.isBlank()) {
-                Collaborator collaborator = project.findCollaboratorByName(collaboratorName);
-                if (collaborator == null) {
-                    CollaboratorCategory category = CollaboratorCategory.Junior;
-                    try {
-                        category = CollaboratorCategory.valueOf(capitalize(collaboratorCategory));
-                    } catch (Exception ignored) {
-                    }
-                    collaborator = new Collaborator(
-                        UUID.randomUUID().toString(),
-                        collaboratorName,
-                        category
-                    );
-                    project.addCollaborator(collaborator);
+                CollaboratorCategory category = CollaboratorCategory.Junior;
+                try {
+                    category = CollaboratorCategory.valueOf(capitalize(collaboratorCategory));
+                } catch (Exception ignored) {
                 }
 
+                Collaborator collaborator = taskService.createCollaborator(collaboratorName, category);
+                taskService.assignCollaboratorToProject(
+                    collaborator.getCollaboratorId(), project.getName());
+
                 if (collaborator.canAcceptTask()) {
-                    task.addSubtaskForCollaborator(
-                        UUID.randomUUID().toString(),
+                    taskService.assignCollaboratorToTask(
+                        task.getTaskId(),
                         subtaskName.isBlank() ? taskName : subtaskName,
-                        collaborator
-                    );
+                        collaborator.getCollaboratorId());
                 } else {
                     System.out.println("Warning: collaborator "
                         + collaboratorName + " is at task limit, skipping link.");
                 }
             }
+        } else if (!subtaskName.isBlank()) {
+            taskService.addSubtaskToTask(task.getTaskId(), subtaskName);
         }
     }
 

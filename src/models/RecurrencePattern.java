@@ -14,6 +14,22 @@ public class RecurrencePattern {
     public RecurrencePattern(String patternId, RecurrenceType type,
                              LocalDate startDate, LocalDate endDate,
                              int interval) {
+        if (patternId == null || patternId.isBlank()) {
+            throw new IllegalArgumentException("Pattern id is required");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("Recurrence type is required");
+        }
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("Start and end dates are required");
+        }
+        if (interval <= 0) {
+            throw new IllegalArgumentException("Recurrence interval must be positive");
+        }
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date cannot be before start date");
+        }
+
         this.patternId = patternId;
         this.type = type;
         this.startDate = startDate;
