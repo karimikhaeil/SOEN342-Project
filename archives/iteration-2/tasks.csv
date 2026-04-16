@@ -1,0 +1,4 @@
+TaskName,Description,Subtask,Status,Priority,DueDate,ProjectName,ProjectDescription,Collaborator,CollaboratorCategory
+Deploy backend,Push to prod,Production rollout,open,high,2025-06-12,Project Alpha,Main backend project,Alice,Senior
+Design mockups,UI screens,Landing page draft,open,medium,2025-06-18,Project Alpha,Main backend project,Bob,Junior
+Database migration,Move to new schema,,open,high,2025-06-08,Project Beta,Data migration project,,
