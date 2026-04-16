@@ -43,12 +43,13 @@ src/
 `-- services/
 ```
 
-The iteration folders are kept in the repository for archived artifacts and documentation:
+The iteration folders are kept in the repository under `archives/` for archived artifacts and documentation:
 
 ```text
-iteration-1/
-iteration-2/
-iteration-3/
+archives/
+|-- iteration-1/
+|-- iteration-2/
+`-- iteration-3/
 ```
 
 ## Main Components
@@ -102,3 +103,6 @@ These generated files are not part of the source code and should not be treated 
 - The final project code is the root `src/` folder.
 - Archived iteration artifacts remain in the repo for reference and submission history.
 - The system starts using saved data from `data/` when available.
+
+## Demo Video
+The demo video link is provided in [Demo Link.md](./Demo%20Link.md).
